@@ -25,6 +25,7 @@ SRC = \
     kernel/kernel.c \
     kernel/kprintf.c \
     kernel/panic.c \
+	kernel/shell.c \
     drivers/uart.c
 
 OBJ = \
@@ -32,6 +33,7 @@ OBJ = \
     $(BUILD_DIR)/kernel.o \
     $(BUILD_DIR)/kprintf.o \
     $(BUILD_DIR)/panic.o \
+	$(BUILD_DIR)/shell.o \
     $(BUILD_DIR)/uart.o
 
 all: $(IMG)
@@ -45,6 +47,9 @@ $(OUTPUT_DIR):
 $(BUILD_DIR)/boot.o: boot/boot.s | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(BUILD_DIR)/uart.o: drivers/uart.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(BUILD_DIR)/kernel.o: kernel/kernel.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -54,7 +59,7 @@ $(BUILD_DIR)/panic.o: kernel/panic.c | $(BUILD_DIR)
 $(BUILD_DIR)/kprintf.o: kernel/kprintf.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/uart.o: drivers/uart.c | $(BUILD_DIR)
+$(BUILD_DIR)/shell.o: kernel/shell.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ELF): $(OBJ) | $(OUTPUT_DIR)

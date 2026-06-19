@@ -43,3 +43,9 @@ void uart_puts(const char *str)
         uart_putc(*str++);
     }
 }
+
+char uart_getc(void){
+    while(UART_FR & (1 << 4));
+
+    return (char)(UART_DR & 0xFF);
+}
