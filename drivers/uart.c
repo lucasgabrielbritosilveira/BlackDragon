@@ -11,16 +11,6 @@
 #define UART_IMSC  (*(volatile unsigned int *)(UART0_BASE + 0x38))
 #define UART_ICR   (*(volatile unsigned int *)(UART0_BASE + 0x44))
 
-void uart_init(void)
-{
-    UART_CR = 0;
-    UART_ICR = 0x7FF;
-    UART_IBRD = 1;
-    UART_FBRD = 40;
-    UART_LCRH = (1 << 4) | (3 << 5);
-    UART_CR = (1 << 0) | (1 << 8) | (1 << 9);
-}
-
 void uart_putc(char c)
 {
     while (UART_FR & (1 << 5))
