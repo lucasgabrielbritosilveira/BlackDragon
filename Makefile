@@ -22,18 +22,22 @@ LDFLAGS = -T linker.ld
 
 SRC = \
     boot/boot.s \
+	kernel/exception.c \
     kernel/kernel.c \
     kernel/kprintf.c \
     kernel/panic.c \
 	kernel/shell.c \
+	kernel/vectors.s \
     drivers/uart.c
 
 OBJ = \
     $(BUILD_DIR)/boot.o \
+	$(BUILD_DIR)/exception.o \
     $(BUILD_DIR)/kernel.o \
     $(BUILD_DIR)/kprintf.o \
     $(BUILD_DIR)/panic.o \
 	$(BUILD_DIR)/shell.o \
+	$(BUILD_DIR)/vectors.o \
     $(BUILD_DIR)/uart.o
 
 all: $(IMG)
@@ -50,6 +54,9 @@ $(BUILD_DIR)/boot.o: boot/boot.s | $(BUILD_DIR)
 $(BUILD_DIR)/uart.o: drivers/uart.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(BUILD_DIR)/exception.o: kernel/exception.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(BUILD_DIR)/kernel.o: kernel/kernel.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -60,6 +67,9 @@ $(BUILD_DIR)/kprintf.o: kernel/kprintf.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/shell.o: kernel/shell.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/vectors.o: kernel/vectors.s | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ELF): $(OBJ) | $(OUTPUT_DIR)
