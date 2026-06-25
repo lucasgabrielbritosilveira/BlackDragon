@@ -27,6 +27,7 @@ SRC = \
     kernel/kprintf.c \
     kernel/panic.c \
 	kernel/shell.c \
+	kernel/timer.c \
 	kernel/vectors.s \
     drivers/uart.c
 
@@ -37,6 +38,7 @@ OBJ = \
     $(BUILD_DIR)/kprintf.o \
     $(BUILD_DIR)/panic.o \
 	$(BUILD_DIR)/shell.o \
+	$(BUILD_DIR)/timer.o \
 	$(BUILD_DIR)/vectors.o \
     $(BUILD_DIR)/uart.o
 
@@ -66,6 +68,9 @@ $(BUILD_DIR)/panic.o: kernel/panic.c | $(BUILD_DIR)
 $(BUILD_DIR)/kprintf.o: kernel/kprintf.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(BUILD_DIR)/timer.o: kernel/timer.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+	
 $(BUILD_DIR)/shell.o: kernel/shell.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
