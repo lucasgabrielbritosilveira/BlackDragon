@@ -1,0 +1,43 @@
+name: Kernel CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Raspberry Pi Kernel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ARM64 toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            make \
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu
+
+      - name: Build kernel
+        run: make rebuild
+
+      - name: Verify generated files
+        run: |
+          test -f output/kernel8.elf
+          test -f output/kernel8.img
+          ls -lah output
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-build
+          path: |
+            output/kernel8.elf
+            output/kernel8.img
+          if-no-files-found: error
